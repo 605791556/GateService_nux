@@ -1,0 +1,17 @@
+[HTTPSERVER]
+#前端http服务IP
+ip=127.0.0.1
+
+[HEARDTIME]
+#启动链路测试的time值ms
+time=30000
+
+[LOCAL]
+#本地http服务端口和tcp端口
+httpport=8848
+tcpport=8849
+tcpip=192.168.3.129
+
+[GATE]
+#服务器允许连上的最大闸机数
+gatenum=20
