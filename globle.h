@@ -21,6 +21,7 @@ using std::vector;
 #pragma comment(lib,"json_vc71_libmt.lib")
 #endif
 
+#define IP_UNIQUE_IDENTIFY 0 //闸机IP是否能作为唯一标识 用于连接校验
 
 #define MAX_BUFFER   1024*10
 
@@ -108,7 +109,6 @@ public:
 	//初始化公用变量
 	bool InitGloble();
 	bool ReadConf();
-	string GetAppDataPath();
 	string GetLogFileName();
 	bool get_local_ip();
 

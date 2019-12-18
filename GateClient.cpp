@@ -154,6 +154,8 @@ bool CGateClient::AddClientList(BASE_SOCKET s,sockaddr_in addr)
 		}
 	}
 
+#if IP_UNIQUE_IDENTIFY
+
 	for (int i=0;i<nCount;i++)
 	{
 		string strIP=inet_ntoa(addr.sin_addr);
@@ -175,6 +177,7 @@ bool CGateClient::AddClientList(BASE_SOCKET s,sockaddr_in addr)
 		}
 		return false;
 	}
+#endif
 
 	Node* node = new Node;
 	node->s=s;
@@ -289,6 +292,13 @@ void* GateClientThread(void* lpParam)
 		}
 		else if(revLen>0)
 		{
+			//校验数据包头
+			unsigned char start_bt = szRequest[0];
+			if (start_bt != msgType[TYPE_BEGIN])
+			{
+				Log("数据包头不一致");
+				break;
+			}
 			waitTime = 0;
 			len+=revLen;
 
@@ -495,7 +505,8 @@ void* GateClientThread(void* lpParam)
 
 							nRet=pnode->fal_074->ParseData(data);
 							if (nRet)
-							{	
+							{
+#if IP_UNIQUE_IDENTIFY
 								if (pnode->strGateID == pnode->fal_074->DeviceID)
 								{
 									g_globle->m_gateClient->SendToGateClient(sClient,ackBuf,sizeof(ackBuf));
@@ -508,6 +519,11 @@ void* GateClientThread(void* lpParam)
 									Log("设备预留ID：%s与设备状态上传ID：%s不一致，断开连接",pnode->strGateID.c_str(),pnode->fal_074->DeviceID);
 									Log("返回nak报文：%s,流水号:%d",g_globle->CharStr2HexStr(nakBuf,sizeof(nakBuf)).c_str(),oldMsgNumber);
 								}
+#else
+								pnode->strGateID = pnode->fal_074->DeviceID;
+								g_globle->m_gateClient->SendToGateClient(sClient,ackBuf,sizeof(ackBuf));
+								Log("返回ack报文：%s,流水号:%d",g_globle->CharStr2HexStr(ackBuf,sizeof(ackBuf)).c_str(),oldMsgNumber);
+#endif	
 							}
 							else
 							{

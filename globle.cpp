@@ -41,34 +41,6 @@ GlobleAll::~GlobleAll()
 {
 	RELEASE_NEW(m_gateClient);
 }
-string GlobleAll::GetAppDataPath()
-{
-	struct sTemp
-	{
-		sTemp(){temp=new char[MAX_PATH];memset(temp,0,MAX_PATH);}
-		~sTemp(){delete temp;temp=0;}
-		char* temp;
-	};
-	static sTemp t;
-	if(0==t.temp[0])
-	{
-#ifdef WIN32
-		::GetModuleFileNameA(0,t.temp,MAX_PATH-1);
-#endif
-#ifdef linux
-		readlink ("/proc/self/exe", t.temp, MAX_PATH-1);
-#endif
-		for(int i=(int)strlen(t.temp)-1;i>=0;i--)
-		{
-			if(t.temp[i]=='\\'||t.temp[i]=='/')
-			{
-				t.temp[i+1]=0;
-				break;
-			}
-		}
-	}
-	return t.temp;
-}
 
 bool GlobleAll::InitGloble()
 {

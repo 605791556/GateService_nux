@@ -74,7 +74,7 @@ public:
 #endif
 
 public:
-	//保存闸机列表
+	//保存闸机列表,仅用于连接校验
 	bool AddGateList(const char* pContent);
 	//删除指定闸机
 	void DeleteGate(Node* pnode);

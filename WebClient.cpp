@@ -238,10 +238,12 @@ void* WebAcceptThread(void* lpParam)
 										int num = g_globle->m_gateClient->vNode.size();
 										for (int j=0;j<num;j++)
 										{
+#if IP_UNIQUE_IDENTIFY
 											if (gateMsg.strGateIP == inet_ntoa(g_globle->m_gateClient->vNode[j]->Addr.sin_addr))
 											{
 												g_globle->m_gateClient->vNode[j]->strGateID = gateMsg.strGateID;
 											}
+#endif
 										}
 										g_globle->m_gateClient->vGate.push_back(gateMsg);
 										Log("Õ¢»ú%d£ºcode:%s,ip:%s",i+1,gateMsg.strGateID.c_str(),gateMsg.strGateIP.c_str());
